@@ -1,0 +1,16 @@
+class Solution {
+    public int findMaxSum(int arr[]) {
+    int [] dp= new int[arr.length];
+    Arrays.fill(dp,-1);
+    return loot(arr,0,dp);
+    
+        
+    }
+    public int loot(int arr[],int i,int[] dp){
+        if(i>=arr.length) return 0;
+        if(dp[i]!=-1) return dp[i];
+        int pick=arr[i]+loot(arr,i+2,dp);
+        int skip=loot(arr,i+1,dp);
+        return dp[i]=Math.max(pick,skip);
+    }
+}
