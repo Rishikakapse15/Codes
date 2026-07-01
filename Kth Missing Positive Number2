@@ -1,0 +1,23 @@
+class Solution {
+    public int findKthPositive(int[] arr, int k) {
+        int low = 0;
+        int high = arr.length - 1;
+        
+        // Binary search to find the window where the kth missing number lies
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+            
+            // Number of missing elements up to index 'mid'
+            int missingCount = arr[mid] - (mid + 1);
+            
+            if (missingCount < k) {
+                low = mid + 1; // Look in the right half
+            } else {
+                high = mid - 1; // Look in the left half
+            }
+        }
+        
+        // The kth missing number can be computed directly using 'low'
+        return low + k;
+    }
+}
