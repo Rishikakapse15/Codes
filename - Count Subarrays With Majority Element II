@@ -1,0 +1,61 @@
+class Solution {
+    // Binary Indexed Tree (Fenwick Tree) implementation
+    private class BIT {
+        int[] tree;
+        int size;
+
+        BIT(int size) {
+            this.size = size;
+            this.tree = new int[size + 1];
+        }
+
+        void update(int index, int delta) {
+            while (index <= size) {
+                tree[index] += delta;
+                index += index & (-index);
+            }
+        }
+
+        int query(int index) {
+            int sum = 0;
+            while (index > 0) {
+                sum += tree[index];
+                index -= index & (-index);
+            }
+            return sum;
+        }
+    }
+
+    public long countMajoritySubarrays(int[] nums, int target) {
+        int n = nums.length;
+        // The prefix sum ranges from -n to n. 
+        // We shift by (n + 1) to keep indices positive and 1-based for the BIT.
+        int offset = n + 1;
+        BIT bit = new BIT(2 * n + 2);
+
+        long count = 0;
+        int currentSum = 0;
+
+        // Insert the initial prefix sum P[0] = 0
+        bit.update(0 + offset, 1);
+
+        for (int num : nums) {
+            // Transform element to +1 or -1
+            if (num == target) {
+                currentSum += 1;
+            } else {
+                currentSum -= 1;
+            }
+
+            // We want to count previous prefix sums that are strictly less than currentSum
+            // So we query up to (currentSum - 1)
+            int queryIndex = (currentSum - 1) + offset;
+            count += bit.query(queryIndex);
+
+            // Add the current prefix sum to the BIT
+            bit.update(currentSum + offset, 1);
+        }
+
+        return count;
+    }
+}
