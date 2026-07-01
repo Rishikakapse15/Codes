@@ -1,0 +1,41 @@
+class Solution {
+    public int shipWithinDays(int[] weights, int days) {
+        int low = 0;
+        int high = 0;
+        
+        for (int w : weights) {
+            low = Math.max(low, w); // The ship must at least fit the heaviest package
+            high += w;              // Maximum capacity is shipping everything at once
+        }
+        
+        // Binary search for the minimum valid capacity
+        while (low < high) {
+            int mid = low + (high - low) / 2;
+            
+            // Check if 'mid' capacity can get the job done in 'days'
+            if (canShip(weights, days, mid)) {
+                high = mid; // Try to find an even smaller valid capacity
+            } else {
+                low = mid + 1; // 'mid' is too small, we need more capacity
+            }
+        }
+        
+        return low;
+    }
+    
+    private boolean canShip(int[] weights, int days, int capacity) {
+        int daysNeeded = 1;
+        int currentLoad = 0;
+        
+        for (int w : weights) {
+            if (currentLoad + w > capacity) {
+                daysNeeded++;   // Ship is full! Move to the next day
+                currentLoad = w; // Put this package on the new day's ship
+            } else {
+                currentLoad += w; // Keep loading the current ship
+            }
+        }
+        
+        return daysNeeded <= days;
+    }
+}
