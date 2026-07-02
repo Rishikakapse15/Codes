@@ -1,0 +1,25 @@
+class Solution {
+    public int arrangeCoins(int n) {
+        long low = 0;
+        long high = n;
+        
+        while (low <= high) {
+            long mid = low + (high - low) / 2;
+            // Calculate total coins required for 'mid' complete rows
+            long coinsUsed = mid * (mid + 1) / 2;
+            
+            if (coinsUsed == n) {
+                return (int) mid; // Perfect match found
+            }
+            
+            if (coinsUsed < n) {
+                low = mid + 1; // Try to make more rows
+            } else {
+                high = mid - 1; // Too many coins required, reduce row count
+            }
+        }
+        
+        // When low > high, 'high' represents the maximum number of complete rows
+        return (int) high;
+    }
+}
