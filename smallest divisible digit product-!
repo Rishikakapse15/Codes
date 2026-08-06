@@ -1,0 +1,22 @@
+lass Solution {
+    public int smallestNumber(int n, int t) {
+        while(true){
+            int product=digitProduct(n);//calling function and storing the new product value
+       if (product % t == 0)
+    return n;
+    n++;
+    }
+    }
+    public int digitProduct(int x){
+         int product =1;
+        while(x>0){//x is the number
+            int digit=x%10;
+            product*=digit;
+            x/=10;
+        }
+        return product;
+        
+
+    
+}
+}
