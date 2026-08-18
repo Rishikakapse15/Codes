@@ -1,0 +1,46 @@
+import java.util.*;
+
+class Solution {
+    public int largestInteger(int[] nums, int k) {
+
+        int n = nums.length;
+        HashMap<Integer, Integer> map = new HashMap<>();
+
+        // Count frequency of every number
+        for (int x : nums) {
+            map.put(x, map.getOrDefault(x, 0) + 1);
+        }
+
+        int ans = -1;
+
+        // Only one subarray exists
+        if (k == n) {
+            for (int x : map.keySet()) {
+                ans = Math.max(ans, x);
+            }
+            return ans;
+        }
+
+        // Every element forms its own subarray
+        if (k == 1) {
+            for (int x : map.keySet()) {
+                if (map.get(x) == 1) {
+                    ans = Math.max(ans, x);
+                }
+            }
+            return ans;
+        }
+
+        // k > 1 and k < n
+        // Only first or last element can belong to exactly one subarray
+        if (map.get(nums[0]) == 1) {
+            ans = Math.max(ans, nums[0]);
+        }
+
+        if (map.get(nums[n - 1]) == 1) {
+            ans = Math.max(ans, nums[n - 1]);
+        }
+
+        return ans;
+    }
+}
